@@ -1,4 +1,5 @@
 import sys
+import os
 
 while True:
     try:
@@ -58,9 +59,20 @@ def  gerar_lista( quantidade = None,  valor_minimo = None, valor_maximo =None):
     listaGeradaCorretamente = False
     sys.exit()
 
-resultado, lista = gerar_lista(quantidadeDeItens, valorMinimo, valorMaximo)
+def salvar_lista(nome_lista, nome_arquivo):
+    try:
+        diretorio_atual = os.path.dirname(os.path.realpath(__file__))
+        caminho_arquivo = os.path.join(diretorio_atual, nome_arquivo)
 
-print(resultado)
-print(lista)
+        with open(caminho_arquivo, 'w') as arquivo:
+            for item in nome_lista:
+                arquivo.write(str(item) + '\n')
+        print('Arquivo salvo com sucesso')
+    except Exception as e:
+        print(f"\nERROR ao salvar lista: {e}")
+
+listaGeradaCorretamente, lista = gerar_lista(quantidadeDeItens, valorMinimo, valorMaximo)
+resultado = salvar_lista(lista, 'minha_lista.txt')
+
 
 
