@@ -55,7 +55,7 @@ def  gerar_lista( quantidade = None,  valor_minimo = None, valor_maximo =None):
     sys.exit()
 
   except Exception as exceptionError:
-    print(f"\nERROR: {exceptionError}")
+    print(f"\nERROR: {exceptionError}") 
     listaGeradaCorretamente = False
     sys.exit()
 
