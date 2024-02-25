@@ -38,7 +38,9 @@ def  gerar_lista( quantidade = None,  valor_minimo = None, valor_maximo =None):
       raise ValueError("Todos os campos devem ser preenchidos")
 
     if listaGeradaCorretamente:
-      
+      periodo = valor_maximo - valor_minimo + 1
+      lista = [itens for itens in range(valor_minimo, valor_maximo + 1)] * (quantidade + periodo // periodo)
+      lista = lista[:quantidade]
       return listaGeradaCorretamente, lista
 
   except ValueError as valueError:
