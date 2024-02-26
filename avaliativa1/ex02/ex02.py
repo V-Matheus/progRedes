@@ -1,16 +1,13 @@
 import os 
 
-diretorioAtual = os.path.abspath(__file__)
-
 while True:
     try:
         nomeDoArquivo = input('DIgite o nome do arquivo: ')
 
-        diretorioEx01 = os.path.join(diretorioAtual, '..', 'ex01', nomeDoArquivo + '.txt')
-        
-        with open(diretorioEx01, 'r', encoding='utf-8') as diretorioEx01:
-            conteudo_ex01 = arquivo_ex01.read()
-        print(conteudo_ex01)
+        caminhoArquivo = os.path.abspath(f'avaliativa1\ex01\{nomeDoArquivo}.txt')
+        with open(caminhoArquivo, 'r', encoding='utf-8') as arquivoSelecionado:
+            conteudoDoArquivo = arquivoSelecionado.read()
+        print(conteudoDoArquivo)
 
         break
 
