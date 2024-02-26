@@ -29,3 +29,37 @@ while True:
     print(arquivoLidoComSucessso, listaValores)
     break
 
+def ordena_bubble(listaValores):
+  n = len(listaValores)
+
+  for i in range(n):
+    for j in range(0, n - i - 1):
+      if listaValores[j] > listaValores[j + 1]:
+         listaValores[j], listaValores[j + 1] = listaValores[j + 1], listaValores[j]
+
+while True:
+  metodoOrdena = input('DIgite o método de ordenação (BUBBLE, INSERTION, SELECTION, QUICK): ')
+
+  def ordena_lista(nome_lista, método_ordena):
+    try:
+      if método_ordena == 'BUBBLE':
+        return ordena_bubble(nome_lista)   
+
+      elif método_ordena == 'INSERTION':
+        ordena_insertion()
+
+      elif método_ordena == 'SELECTION':
+        ordena_selection()
+
+      elif método_ordena == 'QUICK':
+        ordena_quick()
+
+    except Exception as e:
+        print(f"\nERROR: {e}")
+        return False, None
+
+  ordenacaoFeitaComSucesso, resultadoOrdenacao = ordena_lista(nomeDoArquivo, metodoOrdena)
+  
+  if ordenacaoFeitaComSucesso:
+    print(ordenacaoFeitaComSucesso, resultadoOrdenacao)
+    break
