@@ -31,13 +31,34 @@ def ordena_bubble(listaValores):
          listaValores[j], listaValores[j + 1] = listaValores[j + 1], listaValores[j]
   return True, listaValores
 
+def ordena_insertion(listaValores):
+    try:
+        # Convertendo para uma lista de números, caso não esteja
+        listaValores = [int(valor) for valor in listaValores]
+
+        n = len(listaValores)
+
+        for i in range(1, n):
+            chave = listaValores[i]
+            j = i - 1
+            while j >= 0 and chave < listaValores[j]:
+                listaValores[j + 1] = listaValores[j]
+                j -= 1
+            listaValores[j + 1] = chave
+
+        return True, listaValores
+
+    except Exception as e:
+        print(f"\nERROR: {e}")
+        return False, None
+
 def ordena_lista(nome_lista, método_ordena):
   try:
     if método_ordena == 'BUBBLE':
       return ordena_bubble(nome_lista)
 
     elif método_ordena == 'INSERTION':
-      print('INSERTION')
+      return ordena_insertion(nome_lista)
 
     elif método_ordena == 'SELECTION':
       print('SELECTION')
