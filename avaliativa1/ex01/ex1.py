@@ -5,7 +5,7 @@ while True:
       quantidadeDeItens = int(input('Digite a quantidade de itens: '))
       valorMinimo = int(input('Digite o valor minimo: '))
       valorMaximo = int(input('Digite o valor máximo: '))
-      if quantidadeDeItens < 0 or valorMinimo < 0 or valorMaximo < 0:
+      if quantidadeDeItens < 0:
           print("Digite um valor válido")
           continue
       else:
@@ -31,8 +31,8 @@ def  gerar_lista( quantidade = None,  valor_minimo = None, valor_maximo =None):
       listaGeradaCorretamente = False
       return listaGeradaCorretamente, lista
 
-    if quantidade <= 0 or valor_minimo < 0 or valor_maximo < 0:
-      raise ValueError("Todos os valores devem ser inteiros positivos")
+    if quantidade <= 0:
+      raise ValueError("A quantidade deve ser inteiro positivo")
 
     if quantidade is None or valor_minimo is None or valor_maximo is None:
       raise ValueError("Todos os campos devem ser preenchidos")
@@ -70,4 +70,3 @@ def salvar_lista(nome_lista, nome_arquivo):
 
 listaGeradaCorretamente, lista = gerar_lista(quantidadeDeItens, valorMinimo, valorMaximo)
 resultado = salvar_lista(lista, 'minha_lista.txt')
-
