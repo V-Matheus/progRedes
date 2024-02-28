@@ -76,3 +76,5 @@ resultado = salvar_lista(lista, 'minha_lista.txt')
 
 
 
+
+
