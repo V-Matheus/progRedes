@@ -66,6 +66,26 @@ def ordena_insertion(listaValores):
     except Exception as e:
         print(f"\nERROR: {e}")
         return False, None
+        
+def ordena_quick(listaValores):
+    if len(listaValores) <= 1:
+        return True, listaValores
+
+    pivô = listaValores[len(listaValores) // 2]
+    menores, iguais, maiores = [], [], []
+
+    for valor in listaValores:
+        if valor < pivô:
+            menores.append(valor)
+        elif valor == pivô:
+            iguais.append(valor)
+        else:
+            maiores.append(valor)
+
+    _, lista_menores = ordena_quick(menores)
+    _, lista_maiores = ordena_quick(maiores)
+
+    return True, lista_menores + iguais + lista_maiores
 
 def ordena_lista(nome_lista, método_ordena):
   try:
@@ -79,7 +99,9 @@ def ordena_lista(nome_lista, método_ordena):
       return ordena_insertion(nome_lista)
 
     elif método_ordena == 'QUICK':
-      print('QUICK')
+      return ordena_quick(nome_lista)
+    else:
+        raise ValueError("Método de ordenação inválido")
 
 
   except Exception as e:
