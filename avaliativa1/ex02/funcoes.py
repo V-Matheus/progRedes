@@ -31,6 +31,21 @@ def ordena_bubble(listaValores):
          listaValores[j], listaValores[j + 1] = listaValores[j + 1], listaValores[j]
   return True, listaValores
 
+def ordena_selection(listaValores):
+    n = len(listaValores)
+
+    for i in range(n):
+        # Encontra o índice do menor elemento na parte não ordenada
+        indice_minimo = i
+        for j in range(i + 1, n):
+            if listaValores[j] < listaValores[indice_minimo]:
+                indice_minimo = j
+
+        # Troca o menor elemento com o primeiro elemento não ordenado
+        listaValores[i], listaValores[indice_minimo] = listaValores[indice_minimo], listaValores[i]
+
+    return True, listaValores
+
 def ordena_insertion(listaValores):
     try:
         # Convertendo para uma lista de números, caso não esteja
@@ -61,7 +76,7 @@ def ordena_lista(nome_lista, método_ordena):
       return ordena_insertion(nome_lista)
 
     elif método_ordena == 'SELECTION':
-      print('SELECTION')
+      return ordena_insertion(nome_lista)
 
     elif método_ordena == 'QUICK':
       print('QUICK')
