@@ -1,4 +1,4 @@
-import os
+import os, random
 
 def lerArquivo(nome_arquivo):
     try:
@@ -9,3 +9,7 @@ def lerArquivo(nome_arquivo):
     except FileNotFoundError:
         print(f"Arquivo '{nome_arquivo}' não encontrado.")
         return None
+
+
+def sortearPalavra(listaPalavras):
+    return listaPalavras[random.randint(1, len(listaPalavras))]
