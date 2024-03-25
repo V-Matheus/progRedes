@@ -8,7 +8,7 @@ with open(nomeArquivoTcp, 'rb') as arquivo:
 
   while True:
     try:
-      header_length = ler_pacote_ip(arquivo)
+      header_length = lerPacoteIp(arquivo)
       arquivo.read(header_length)  # Ler apenas o cabeçalho
 
     except struct.error:
