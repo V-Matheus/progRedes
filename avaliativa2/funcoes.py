@@ -109,3 +109,25 @@ def tamanhoMaiorTcp(nomeArquivo):
 
     print(maiorTamanhoTcp)
 
+def verificacaoDePacotesSalvos(nomeArquivo):
+    totalPacotes = 0
+    pacotesIncompletos = 0
+
+    with open(nomeArquivo, 'rb') as arquivo:
+        while True:
+            try:
+                headerLength = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
+                proximoProtocolo = arquivo.read(1)
+                # Se for 17, significa que o próximo protocolo é UDP
+                if proximoProtocolo == b'\x11':
+                    # Lendo o campo que contém o tamanho do pacote capturado
+                    capturedLength = struct.unpack('<I', arquivo.read(4))[0]
+                    # Lendo o campo que contém o tamanho original do pacote
+                    original_length = struct.unpack('<I', arquivo.read(4))[0]
+                    totalPacotes += 1
+                    if capturedLength < original_length:
+                        pacotesIncompletos += 1
+            except struct.error:
+                break
+
+    print("Número de pacotes incompletos:", pacotesIncompletos)

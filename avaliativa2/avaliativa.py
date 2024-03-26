@@ -20,3 +20,6 @@ tempoInicioFim(nomeArquivoTcp)
 
 # C) Qual o tamanho do maior TCP pacote capturado?
 tamanhoMaiorTcp(nomeArquivoTcp)
+
+# d) Há pacotes que não foram salvos nas suas totalidades? Quantos?
+verificacaoDePacotesSalvos(nomeArquivoTcp)
