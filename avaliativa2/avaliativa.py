@@ -23,3 +23,6 @@ tamanhoMaiorTcp(nomeArquivoTcp)
 
 # d) Há pacotes que não foram salvos nas suas totalidades? Quantos?
 verificacaoDePacotesSalvos(nomeArquivoTcp)
+
+# e) Qual o tamanho médio dos pacotes UDP capturados?
+tamanhoMedioUdp(nomeArquivoTcp)

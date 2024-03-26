@@ -107,7 +107,7 @@ def tamanhoMaiorTcp(nomeArquivo):
             except struct.error:
                 break
 
-    print(maiorTamanhoTcp)
+    print("\nMaior tamanho TCP: ",maiorTamanhoTcp)
 
 def verificacaoDePacotesSalvos(nomeArquivo):
     totalPacotes = 0
@@ -130,4 +130,27 @@ def verificacaoDePacotesSalvos(nomeArquivo):
             except struct.error:
                 break
 
-    print("Número de pacotes incompletos:", pacotesIncompletos)
+    print("\nNúmero de pacotes incompletos:", pacotesIncompletos)
+
+def tamanhoMedioUdp(nomeArquivo):
+    totalPacotesUdp = 0
+    tamanhoTotalUdp = 0
+
+    with open(nome_arquivo, 'rb') as arquivo:
+        while True:
+            try:
+                headerLength = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
+                proximoProtocolo = arquivo.read(1)
+                # Se for 17, significa que o próximo protocolo é UDP
+                if proximoProtocolo == b'\x11':
+                    # Lendo o campo que contém o tamanho do pacote capturado
+                    capturedLength = struct.unpack('<I', arquivo.read(4))[0]
+                    totalPacotesUdp += 1
+                    tamanhoTotalUdp += capturedLength
+            except struct.error:
+                break
+
+    if totalPacotesUdp == 0:
+        return 0
+    else:
+        print("\nTamanho médio dos pacotes UDP capturados em bytes: ",tamanhoTotalUdp / totalPacotesUdp)
