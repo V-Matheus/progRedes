@@ -88,3 +88,24 @@ def tempoInicioFim(nomeArquivo):
 
     print("\nTempo de início da captura:", primeiroTimestamp)
     print("Tempo de término da captura:", ultimoTimestamp)
+
+def tamanhoMaiorTcp(nomeArquivo):
+    maiorTamanhoTcp = 0
+
+    with open(nomeArquivo, 'rb') as arquivo:
+        while True:
+            try:
+                headerLength = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
+                arquivo.read(headerLength)
+               
+                proximoProtocolo = arquivo.read(1)  # Lendo o próximo byte
+ 
+                if proximoProtocolo == b'\x06':     # Se for 6, significa que o próximo protocolo é TCP
+                    tamanhoTcp = struct.unpack('!H', arquivo.read(2))[0]
+                    if tamanhoTcp > maiorTamanhoTcp:
+                        maiorTamanhoTcp = tamanhoTcp
+            except struct.error:
+                break
+
+    print(maiorTamanhoTcp)
+

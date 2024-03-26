@@ -17,3 +17,6 @@ with open(nomeArquivoTcp, 'rb') as arquivo:
 
 # B) Em que momento inicia/termina a captura de pacotes?
 tempoInicioFim(nomeArquivoTcp) 
+
+# C) Qual o tamanho do maior TCP pacote capturado?
+tamanhoMaiorTcp(nomeArquivoTcp)
