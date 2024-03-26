@@ -3,6 +3,7 @@ from funcoes import *
 nomeArquivoTcp = input("Digite o nome do arquivo capturado pelo tcpdump: ")
 lerCabecalho(nomeArquivoTcp)
 
+# A) Mostre o conteúdo de cada um dos campos nos headers dos pacotes IP capturados
 with open(nomeArquivoTcp, 'rb') as arquivo:
   arquivo.read(24)  # O cabeçalho do arquivo tem 24 bytes de tamanho
 
@@ -13,3 +14,6 @@ with open(nomeArquivoTcp, 'rb') as arquivo:
 
     except struct.error:
       break
+
+# B) Em que momento inicia/termina a captura de pacotes?
+tempoInicioFim(nomeArquivoTcp) 

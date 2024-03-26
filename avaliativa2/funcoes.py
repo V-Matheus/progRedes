@@ -11,7 +11,7 @@ def lerCabecalho(nomeArquivo):
           snapLen = struct.unpack('<I', arquivo.read(4))[0]
           linkType = struct.unpack('<I', arquivo.read(4))[0]
 
-          print("Magic Number:", hex(magicNumber))
+          print("\nMagic Number:", hex(magicNumber))
           print("Major Version:", majorVersion)
           print("Minor Version:", minorVersion)
           print("Reserved1:", reserved1)
@@ -26,9 +26,9 @@ def lerCabecalho(nomeArquivo):
         print("Erro ao ler o arquivo:", e)
         return None
 
-def lerPacoteIp(arquivo):
+def lerPacoteIp(nomeArquivo):
     # Lendo o cabeçalho do pacote IP
-    ipHeader = arquivo.read(20)  # O cabeçalho do pacote IP tem 20 bytes de tamanho
+    ipHeader = nomeArquivo.read(20)  # O cabeçalho do pacote IP tem 20 bytes de tamanho
 
     # Interpretando os campos do cabeçalho IP
     versionHeaderLenght = ipHeader[0]  # Primeiro byte contém a versão do IP e o comprimento do cabeçalho
@@ -45,7 +45,7 @@ def lerPacoteIp(arquivo):
     origemIp = '.'.join(map(str, origem))
     destinoIp = '.'.join(map(str, destino))
 
-    print("Versão:", version)
+    print("\nVersão:", version)
     print("Comprimento do Cabeçalho:", headerLength)
     print("Tipo de Serviço:", tipoServico)
     print("Comprimento Total:", totalLength)
@@ -59,3 +59,32 @@ def lerPacoteIp(arquivo):
     print("Endereço de Destino:", destinoIp)
 
     return headerLength
+
+def tempoInicioFim(nomeArquivo):
+    with open(nomeArquivo, 'rb') as arquivo:
+        primeiroTimestamp = None
+        ultimoTimestamp = None
+
+    while True:
+        ipHeader = arquivo.read(20)
+
+        if not ipHeader: 
+            break
+
+        # Ler o timestamp do pacote (os primeiros 8 bytes do cabeçalho IP)
+        timestamp = struct.unpack('!Q', ipHeader[:8])[0]
+
+        # Depois de percorrer todos os bytes vai pegar o valor mínimo (primeiroTimestamp) e o valor máximo (ultimoTimestamp)
+        if primeiroTimestamp is None:
+            primeiroTimestamp = timestamp
+        else:
+            primeiroTimestamp = min(primeiroTimestamp, timestamp)
+
+        if ultimoTimestamp is None:
+            ultimoTimestamp = timestamp
+        else:
+            ultimoTimestamp = max(ultimoTimestamp, timestamp)
+
+
+    print("\nTempo de início da captura:", primeiroTimestamp)
+    print("Tempo de término da captura:", ultimoTimestamp)
