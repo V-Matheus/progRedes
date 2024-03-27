@@ -154,3 +154,33 @@ def tamanhoMedioUdp(nomeArquivo):
         return 0
     else:
         print("\nTamanho médio dos pacotes UDP capturados em bytes: ",tamanhoTotalUdp / totalPacotesUdp)
+
+
+def calcularMaiorTrafego(nomeArquivo):
+    trafegoIp = {}
+
+    with open(nomeArquivo, 'rb') as arquivo:
+        while True:
+            try:
+                headerLength = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
+                proximoProtocolo = arquivo.read(1)
+                # Se for 17, significa que o próximo protocolo é UDP
+                if proximoProtocolo == b'\x11':
+                    # Lendo o campo que contém o endereço IP de origem (12 bytes)
+                    ipOrigem = arquivo.read(12)
+                    # Lendo o campo que contém o endereço IP de destino (12 bytes)
+                    ipDestino = arquivo.read(12)
+                    capturedLength = struct.unpack('<I', arquivo.read(4))[0]
+
+                    # Atualizar o dicionário com o tráfego entre os IPs
+                    if (ipOrigem, ipDestino) in trafegoIp:
+                        trafegoIp[(ipOrigem, ipDestino)] += capturedLength
+                    else:
+                        trafegoIp[(ipOrigem, ipDestino)] = capturedLength
+            except struct.error:
+                break
+
+    # Encontrar o par de IPs com o maior tráfego
+    maiorTrafego = max(trafegoIp, key=trafegoIp.get)
+    print("\nPar de IPs com maior tráfego:", par_ip_maior_trafego)
+
