@@ -26,3 +26,10 @@ verificacaoDePacotesSalvos(nomeArquivoTcp)
 
 # e) Qual o tamanho médio dos pacotes UDP capturados?
 tamanhoMedioUdp(nomeArquivoTcp)
+
+# f) Qual o par de IP com maior tráfego entre eles?
+calcularMaiorTrafego(nomeArquivoTcp)
+
+# g) Com quantos outros IPs o IP da interface capturada interagiu?
+ipInterface = '192.168.1.100' # Esse Ip é apenas de teste
+contarIpsInteragidos(nomeArquivoTcp, ipInterface)

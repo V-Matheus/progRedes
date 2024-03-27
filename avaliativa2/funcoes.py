@@ -184,3 +184,25 @@ def calcularMaiorTrafego(nomeArquivo):
     maiorTrafego = max(trafegoIp, key=trafegoIp.get)
     print("\nPar de IPs com maior tráfego:", par_ip_maior_trafego)
 
+def contarIpsInteragidos(nomeArquivo, ipInterface):
+    ipsInteragidos = set()
+
+    with open(nomeArquivo, 'rb') as arquivo:
+        while True:
+            try:
+                headerLength = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
+                proximoProtocolo = arquivo.read(1)
+                if proximo_protocolo == b'\x11':
+                    ipOrigem = arquivo.read(12)
+                    ipDestino = arquivo.read(12)
+
+                    # Verificar se o IP da interface capturada é igual ao IP de origem ou destino
+                    if ipOrigem == ipInterface:
+                        ipsInteragidos.add(ipDestino)
+                    elif ipDestino == ipInterface:
+                        ipsInteragidos.add(ipOrigem)
+
+            except struct.error:
+                break
+
+    print("Número de outros IPs com os quais o IP da interface capturada interagiu:", len(ipsInteragidos))
