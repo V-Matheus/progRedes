@@ -1,35 +1,40 @@
+import os
 from funcoes import *
 
 nomeArquivoTcp = input("Digite o nome do arquivo capturado pelo tcpdump: ")
-lerCabecalho(nomeArquivoTcp)
+diretorioAtual = os.path.dirname(__file__)
+caminhoArquivoTcp = os.path.join(diretorioAtual, nomeArquivoTcp)
 
+lerCabecalho(caminhoArquivoTcp)
+pacotesLidos = 0
 # A) Mostre o conteúdo de cada um dos campos nos headers dos pacotes IP capturados
-with open(nomeArquivoTcp, 'rb') as arquivo:
-  arquivo.read(24)  # O cabeçalho do arquivo tem 24 bytes de tamanho
+with open(caminhoArquivoTcp, 'rb') as arquivo:
+    while True:
+        try:
+            header_length = lerPacoteIp(arquivo)
+            arquivo.read(header_length)  # Ler apenas o cabeçalho
+            pacotesLidos += 1  # Incrementa a contagem de pacotes lidos
+            print("Pacote lido:", pacotesLidos)  # Exibe a contagem de pacotes lidos
 
-  while True:
-    try:
-      header_length = lerPacoteIp(arquivo)
-      arquivo.read(header_length)  # Ler apenas o cabeçalho
-
-    except struct.error:
-      break
+        except struct.error:
+            print("Fim do arquivo alcançado.")
+            break
 
 # B) Em que momento inicia/termina a captura de pacotes?
-tempoInicioFim(nomeArquivoTcp) 
+tempoInicioFim(caminhoArquivoTcp) 
 
 # C) Qual o tamanho do maior TCP pacote capturado?
-tamanhoMaiorTcp(nomeArquivoTcp)
+tamanhoMaiorTcp(caminhoArquivoTcp)
 
 # d) Há pacotes que não foram salvos nas suas totalidades? Quantos?
-verificacaoDePacotesSalvos(nomeArquivoTcp)
+verificacaoDePacotesSalvos(caminhoArquivoTcp)
 
 # e) Qual o tamanho médio dos pacotes UDP capturados?
-tamanhoMedioUdp(nomeArquivoTcp)
+tamanhoMedioUdp(caminhoArquivoTcp)
 
 # f) Qual o par de IP com maior tráfego entre eles?
-calcularMaiorTrafego(nomeArquivoTcp)
+calcularMaiorTrafego(caminhoArquivoTcp)
 
 # g) Com quantos outros IPs o IP da interface capturada interagiu?
 ipInterface = '192.168.1.100' # Esse Ip é apenas de teste
-contarIpsInteragidos(nomeArquivoTcp, ipInterface)
+contarIpsInteragidos(caminhoArquivoTcp, ipInterface)

@@ -1,3 +1,5 @@
+import struct
+
 def lerCabecalho(nomeArquivo):
     try:
         # Ler o cabeçalho
