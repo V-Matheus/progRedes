@@ -1,11 +1,26 @@
 import os
 from funcoes import *
+from tabulate import tabulate
 
 nomeArquivoTcp = input("Digite o nome do arquivo capturado pelo tcpdump: ")
 diretorioAtual = os.path.dirname(__file__)
 caminhoArquivoTcp = os.path.join(diretorioAtual, nomeArquivoTcp)
 
-lerCabecalho(caminhoArquivoTcp)
+cabecalho = lerCabecalho(caminhoArquivoTcp)
+
+# Separa as chaves e os valores do cabeçalho
+chaves = list(cabecalho.keys())
+valores = list(cabecalho.values())
+
+# Forma os dados da tabela como uma lista de tuplas (chave, valor)
+tabelaCabecalho = [(chave, valor) for chave, valor in zip(chaves, valores)]
+
+# Imprime a tabela usando o tabulate
+print(tabulate(tabelaCabecalho, headers=["Campo", "Valor"], tablefmt="grid"))
+
+
+# Comente as linhas de código abaixo para evitar tantos arquivos
+
 pacotesLidos = 0
 # A) Mostre o conteúdo de cada um dos campos nos headers dos pacotes IP capturados
 with open(caminhoArquivoTcp, 'rb') as arquivo:
@@ -17,7 +32,7 @@ with open(caminhoArquivoTcp, 'rb') as arquivo:
             print("Pacote lido:", pacotesLidos)  # Exibe a contagem de pacotes lidos
 
         except struct.error:
-            print("Fim do arquivo alcançado.")
+            print("\n\n\nFim do arquivo alcançado.\n\n\n")
             break
 
 # B) Em que momento inicia/termina a captura de pacotes?
