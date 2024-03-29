@@ -7,32 +7,33 @@ diretorioAtual = os.path.dirname(__file__)
 caminhoArquivoTcp = os.path.join(diretorioAtual, nomeArquivoTcp)
 
 cabecalho = lerCabecalho(caminhoArquivoTcp)
-
-# Separa as chaves e os valores do cabeçalho
-chaves = list(cabecalho.keys())
-valores = list(cabecalho.values())
-
-# Forma os dados da tabela como uma lista de tuplas (chave, valor)
-tabelaCabecalho = [(chave, valor) for chave, valor in zip(chaves, valores)]
+chavesCabecalho = list(cabecalho.keys())
+valoresCabecalho = list(cabecalho.values())
+tabelaCabecalho = [(chavesCabecalho, valoresCabecalho) for chavesCabecalho, valoresCabecalho in zip(chavesCabecalho, valoresCabecalho)]
 
 # Imprime a tabela usando o tabulate
 print(tabulate(tabelaCabecalho, headers=["Campo", "Valor"], tablefmt="grid"))
-
 
 # Comente as linhas de código abaixo para evitar tantos arquivos
 
 pacotesLidos = 0
 # A) Mostre o conteúdo de cada um dos campos nos headers dos pacotes IP capturados
 with open(caminhoArquivoTcp, 'rb') as arquivo:
-    while True:
+    while pacotesLidos < 20:
         try:
-            header_length = lerPacoteIp(arquivo)
-            arquivo.read(header_length)  # Ler apenas o cabeçalho
+            cabecalhoIp = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
+            chavesIp = list(cabecalhoIp.keys())
+            valoresIp = list(cabecalhoIp.values())
+            tabelaIp = [(chavesIp, valoresIp) for chavesIp, valoresIp in zip(chavesIp, valoresIp)]
+
+            # Imprime a tabela usando o tabulate
+            print(tabulate(tabelaIp, headers=["Campo", "Valor"], tablefmt="grid"))
+            print('-' * 50)
+            arquivo.read(cabecalhoIp['Comprimento do Cabeçalho'])  # Ler apenas o cabeçalho
             pacotesLidos += 1  # Incrementa a contagem de pacotes lidos
-            print("Pacote lido:", pacotesLidos)  # Exibe a contagem de pacotes lidos
 
         except struct.error:
-            print("\n\n\nFim do arquivo alcançado.\n\n\n")
+            print("Fim do arquivo alcançado.")
             break
 
 # B) Em que momento inicia/termina a captura de pacotes?

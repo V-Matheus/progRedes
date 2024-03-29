@@ -30,8 +30,13 @@ def lerCabecalho(nomeArquivo):
 
 
 def lerPacoteIp(nomeArquivo):
+    cabecalhoIp = {}
     # Lendo o cabeçalho do pacote IP
     ipHeader = nomeArquivo.read(20)  # O cabeçalho do pacote IP tem 20 bytes de tamanho
+
+    if len(ipHeader) < 20:
+        print("Cabeçalho IP com tamanho insuficiente.")
+        return None
 
     # Interpretando os campos do cabeçalho IP
     versionHeaderLenght = ipHeader[0]  # Primeiro byte contém a versão do IP e o comprimento do cabeçalho
@@ -48,59 +53,60 @@ def lerPacoteIp(nomeArquivo):
     origemIp = '.'.join(map(str, origem))
     destinoIp = '.'.join(map(str, destino))
 
-    print("\nVersão:", version)
-    print("Comprimento do Cabeçalho:", headerLength)
-    print("Tipo de Serviço:", tipoServico)
-    print("Comprimento Total:", totalLength)
-    print("Identificação:", identificacao)
-    print("Flags:", flags)
-    print("Fragment Offset:", fragmentOffset)
-    print("Time To Live:", timeToLive)
-    print("Protocolo:", protocol)
-    print("Checksum:", checksum)
-    print("Endereço de Origem:", origemIp)
-    print("Endereço de Destino:", destinoIp)
+    cabecalhoIp["nVersão"] = version
+    cabecalhoIp["Comprimento do Cabeçalho"] = headerLength
+    cabecalhoIp["Tipo de Serviço"] = tipoServico
+    cabecalhoIp["Comprimento Total"] = totalLength
+    cabecalhoIp["Identificação"] = identificacao
+    cabecalhoIp["Flags"] = flags
+    cabecalhoIp["Fragment Offset"] = fragmentOffset
+    cabecalhoIp["Time To Live"] = timeToLive
+    cabecalhoIp["Protocolo"] = protocol
+    cabecalhoIp["Checksum"] = checksum
+    cabecalhoIp["Endereço de Origem"] = origemIp
+    cabecalhoIp["Endereço de Destino"] = destinoIp
 
-    return headerLength
+    return cabecalhoIp
 
 def tempoInicioFim(nomeArquivo):
     with open(nomeArquivo, 'rb') as arquivo:
         primeiroTimestamp = None
         ultimoTimestamp = None
 
-    while True:
-        ipHeader = arquivo.read(20)
+        while True:
+            ipHeader = arquivo.read(20)
 
-        if not ipHeader: 
-            break
+            if not ipHeader: 
+                break
 
-        # Ler o timestamp do pacote (os primeiros 8 bytes do cabeçalho IP)
-        timestamp = struct.unpack('!Q', ipHeader[:8])[0]
+            if len(ipHeader) >= 8:
+                segundos, microssegundos = struct.unpack('!II', ipHeader[:8])
+            else:
+                print("Final dos pacotes")
 
-        # Depois de percorrer todos os bytes vai pegar o valor mínimo (primeiroTimestamp) e o valor máximo (ultimoTimestamp)
-        if primeiroTimestamp is None:
-            primeiroTimestamp = timestamp
-        else:
-            primeiroTimestamp = min(primeiroTimestamp, timestamp)
+            # Combinar segundos e microssegundos para formar o timestamp completo
+            timestamp = segundos + microssegundos / 1000000.0
 
-        if ultimoTimestamp is None:
-            ultimoTimestamp = timestamp
-        else:
-            ultimoTimestamp = max(ultimoTimestamp, timestamp)
+            # Depois de percorrer todos os bytes vai pegar o valor mínimo (primeiroTimestamp) e o valor máximo (ultimoTimestamp)
+            if primeiroTimestamp is None:
+                primeiroTimestamp = timestamp
+            else:
+                primeiroTimestamp = min(primeiroTimestamp, timestamp)
 
+            if ultimoTimestamp is None:
+                ultimoTimestamp = timestamp
+            else:
+                ultimoTimestamp = max(ultimoTimestamp, timestamp)
 
     print("\nTempo de início da captura:", primeiroTimestamp)
     print("Tempo de término da captura:", ultimoTimestamp)
-
+    
 def tamanhoMaiorTcp(nomeArquivo):
     maiorTamanhoTcp = 0
 
     with open(nomeArquivo, 'rb') as arquivo:
         while True:
             try:
-                headerLength = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
-                arquivo.read(headerLength)
-               
                 proximoProtocolo = arquivo.read(1)  # Lendo o próximo byte
  
                 if proximoProtocolo == b'\x06':     # Se for 6, significa que o próximo protocolo é TCP
@@ -117,10 +123,10 @@ def verificacaoDePacotesSalvos(nomeArquivo):
     pacotesIncompletos = 0
 
     with open(nomeArquivo, 'rb') as arquivo:
-        while True:
+        while totalPacotes < 20:
             try:
-                headerLength = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
-                proximoProtocolo = arquivo.read(1)
+                cabecalhoIp = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
+                arquivo.read(cabecalhoIp['Comprimento do Cabeçalho'])
                 # Se for 17, significa que o próximo protocolo é UDP
                 if proximoProtocolo == b'\x11':
                     # Lendo o campo que contém o tamanho do pacote capturado
@@ -140,9 +146,8 @@ def tamanhoMedioUdp(nomeArquivo):
     tamanhoTotalUdp = 0
 
     with open(nome_arquivo, 'rb') as arquivo:
-        while True:
+        while totalPacotes < 20:
             try:
-                headerLength = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
                 proximoProtocolo = arquivo.read(1)
                 # Se for 17, significa que o próximo protocolo é UDP
                 if proximoProtocolo == b'\x11':
@@ -165,7 +170,6 @@ def calcularMaiorTrafego(nomeArquivo):
     with open(nomeArquivo, 'rb') as arquivo:
         while True:
             try:
-                headerLength = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
                 proximoProtocolo = arquivo.read(1)
                 # Se for 17, significa que o próximo protocolo é UDP
                 if proximoProtocolo == b'\x11':
@@ -193,7 +197,6 @@ def contarIpsInteragidos(nomeArquivo, ipInterface):
     with open(nomeArquivo, 'rb') as arquivo:
         while True:
             try:
-                headerLength = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
                 proximoProtocolo = arquivo.read(1)
                 if proximo_protocolo == b'\x11':
                     ipOrigem = arquivo.read(12)
