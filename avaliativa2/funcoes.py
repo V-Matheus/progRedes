@@ -103,20 +103,20 @@ def tempoInicioFim(nomeArquivo):
     
 def tamanhoMaiorTcp(nomeArquivo):
     maiorTamanhoTcp = 0
-
+    contagem = 0
     with open(nomeArquivo, 'rb') as arquivo:
-        while True:
+        while contagem < 20:
             try:
                 proximoProtocolo = arquivo.read(1)  # Lendo o próximo byte
- 
                 if proximoProtocolo == b'\x06':     # Se for 6, significa que o próximo protocolo é TCP
                     tamanhoTcp = struct.unpack('!H', arquivo.read(2))[0]
                     if tamanhoTcp > maiorTamanhoTcp:
                         maiorTamanhoTcp = tamanhoTcp
+                    contagem += 1  # Incrementa a contagem apenas se encontrarmos um pacote TCP
             except struct.error:
                 break
 
-    print("\nMaior tamanho TCP: ",maiorTamanhoTcp)
+    print("\nMaior tamanho TCP: ", maiorTamanhoTcp)
 
 def verificacaoDePacotesSalvos(nomeArquivo):
     totalPacotes = 0
@@ -127,6 +127,7 @@ def verificacaoDePacotesSalvos(nomeArquivo):
             try:
                 cabecalhoIp = lerPacoteIp(arquivo)  # Ler o cabeçalho do pacote IP
                 arquivo.read(cabecalhoIp['Comprimento do Cabeçalho'])
+                proximoProtocolo = arquivo.read(1)
                 # Se for 17, significa que o próximo protocolo é UDP
                 if proximoProtocolo == b'\x11':
                     # Lendo o campo que contém o tamanho do pacote capturado
@@ -145,8 +146,8 @@ def tamanhoMedioUdp(nomeArquivo):
     totalPacotesUdp = 0
     tamanhoTotalUdp = 0
 
-    with open(nome_arquivo, 'rb') as arquivo:
-        while totalPacotes < 20:
+    with open(nomeArquivo, 'rb') as arquivo:
+        while totalPacotesUdp < 20:
             try:
                 proximoProtocolo = arquivo.read(1)
                 # Se for 17, significa que o próximo protocolo é UDP
@@ -166,10 +167,11 @@ def tamanhoMedioUdp(nomeArquivo):
 
 def calcularMaiorTrafego(nomeArquivo):
     trafegoIp = {}
-
+    contagem = 0
     with open(nomeArquivo, 'rb') as arquivo:
-        while True:
+        while contagem < 20:
             try:
+                contagem += 1
                 proximoProtocolo = arquivo.read(1)
                 # Se for 17, significa que o próximo protocolo é UDP
                 if proximoProtocolo == b'\x11':
@@ -187,18 +189,23 @@ def calcularMaiorTrafego(nomeArquivo):
             except struct.error:
                 break
 
-    # Encontrar o par de IPs com o maior tráfego
-    maiorTrafego = max(trafegoIp, key=trafegoIp.get)
-    print("\nPar de IPs com maior tráfego:", par_ip_maior_trafego)
+    # Verifica se o dicionário não está vazio antes de tentar encontrar o maior tráfego
+    if trafegoIp:
+        maiorTrafego = max(trafegoIp, key=trafegoIp.get)
+        print("\nPar de IPs com maior tráfego:", maiorTrafego)
+    else:
+        print("\nNão há tráfego registrado entre os IPs.")
+
 
 def contarIpsInteragidos(nomeArquivo, ipInterface):
     ipsInteragidos = set()
-
+    contagem = 0 
     with open(nomeArquivo, 'rb') as arquivo:
-        while True:
+        while contagem < 20:
             try:
+                contagem += 1
                 proximoProtocolo = arquivo.read(1)
-                if proximo_protocolo == b'\x11':
+                if proximoProtocolo == b'\x11':
                     ipOrigem = arquivo.read(12)
                     ipDestino = arquivo.read(12)
 
