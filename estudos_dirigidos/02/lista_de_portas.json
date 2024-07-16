@@ -1,0 +1,62 @@
+[
+  {
+    "porta": 0,
+    "protocolo": " TCP,UDP",
+    "descricao": "Reservada",
+    "status": "Fora de Serviço"
+  },
+  {
+    "porta": 1,
+    "protocolo": " TCP,UDP",
+    "descricao": "TCPMUX (Serviço de porta TCP multiplexador)",
+    "status": "Oficial"
+  },
+  {
+    "porta": 5,
+    "protocolo": " TCP,UDP",
+    "descricao": "RJE (Remote Job Entry - Entrada de trabalho remoto)",
+    "status": "Oficial"
+  },
+  {
+    "porta": 7,
+    "protocolo": " TCP,UDP",
+    "descricao": "ECHO protocol (Serviço Echo)",
+    "status": "Oficial"
+  },
+  {
+    "porta": 9,
+    "protocolo": " TCP,UDP",
+    "descricao": "DISCARD protocol (Serviço zero para teste de conexão)",
+    "status": "Oficial"
+  },
+  {
+    "porta": 11,
+    "protocolo": " TCP,UDP",
+    "descricao": "SYSTAT protocol (Serviço de Estado do Sistema para listar as portas conectadas)",
+    "status": "Oficial"
+  },
+  {
+    "porta": 13,
+    "protocolo": " TCP,UDP",
+    "descricao": "DAYTIME protocol (Envia data e hora para a máquina requerente)",
+    "status": "Oficial"
+  },
+  {
+    "porta": 17,
+    "protocolo": " TCP,UDP",
+    "descricao": "QOTD protocol (Envia a citação do dia para a máquina conectada)",
+    "status": "Oficial"
+  },
+  {
+    "porta": 18,
+    "protocolo": " TCP,UDP",
+    "descricao": "Message Send Protocol (Protocolo de envio de mensagem)",
+    "status": "Oficial"
+  },
+  {
+    "porta": 19,
+    "protocolo": " TCP,UDP",
+    "descricao": "CHARGEN protocol (Character Generator Protocol - Protocolo de geração de caracter)",
+    "status": "Oficial"
+  }
+]
