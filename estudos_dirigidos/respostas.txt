@@ -1,0 +1,16 @@
+a) O que a variável ipHost (linha 4) irá armazenar?
+  A função socket.gethostbyname devolve um endereço IP a partir do DNS recebido. No caso
+  o IP do DNS do host 'www.ifrn.edu.br'
+
+b) O que a linha 9 faz? Explique os parâmetros do método socket utilizados.
+  A linha 9 cria um novo objeto socket.
+  family=socket.AF_INET: Especifica que o socket será utilizado para comunicação com endereços IPv4.
+  type=socket.SOCK_STREAM: Especifica que o socket será do tipo TCP.
+
+c) O que a linha 11 faz?
+  A linha 11 tenta estabelecer uma conexão TCP com o endereço IP em cada porta. Caso não consiga conexao
+  irá cair no except.
+
+d) No geral, o que o código completo está fazendo?
+  No geral ele está pegando o endereço IP e e tentando conexão a partir de várias portas. Caso consiga 
+  fecha o socket, caso dê erro imprime a porta que deu erro.
