@@ -21,7 +21,7 @@ try:
 except:
     print(f'\nERRO.... {sys.exc_info()[0]}')
 else:
-    tcp_socket.settimeout(10)
+    tcp_socket.settimeout(5)
     requisicao = f'GET / HTTP/1.1\r\nHost: {host}\r\nAccept: text/html\r\n\r\n'
     try:
         tcp_socket.sendall(requisicao.encode(CODE_PAGE))
@@ -29,14 +29,21 @@ else:
         print(f'\nERRO.... {sys.exc_info()[0]}')
     else:
         print('-'*50)
+        resposta_completa = ''
         while True:
-            resposta = tcp_socket.recv(BUFFER_SIZE).decode(CODE_PAGE)
-            if not resposta: break
-            print(resposta)
-        print('Salvando arquivo em output.html')
+            try:
+                resposta = tcp_socket.recv(BUFFER_SIZE).decode(CODE_PAGE)
+                if not resposta:
+                    break
+                resposta_completa += resposta
+            except socket.timeout:
+                break
+        print('Arquivo salvo em output.html')
+
+        cabecalho, corpo = resposta_completa.split('\r\n\r\n', 1)
 
         with open(caminho_do_arquivo, 'w', encoding=CODE_PAGE) as file:
-            file.write(resposta)
+            file.write(corpo)
         print('-'*50)
     tcp_socket.close()
 
