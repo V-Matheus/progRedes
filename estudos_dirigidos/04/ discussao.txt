@@ -1,0 +1,27 @@
+1. Implemente o uso de timeout no programa cliente em anexo e teste a solução. Discuta as vantagens e
+desvantagens desse método. Apresente três arquivos na pasta de resposta a essa questão: udp-fileserver-v3.py, udp-file-client-v3.py e discussao.txt.
+
+    Vantagens:
+        A utlização do timeout faz com que o programa não fique esperando infinitamente caso o servidor não envie uma requição. Assim evitando a espera
+        de pacotes que não chegarão.
+
+    Desvantagens:
+        Se for feito uma requisição em uma rede grande ou o tempo de resposta seja lento (Alta latência), o cliente pode parar antes de receber todos os pacotes.
+
+2. Implemente o uso do envio do tamanho do arquivo do servidor para o cliente e teste a solução. Discuta
+as vantagens e desvantagens desse método. Apresente três arquivos na pasta de resposta a essa
+questão: udp-file-server-v4.py, udp-file-client-v4.py e discussao.txt
+
+    Vantagens:
+        O cliente sabe exatamente o tamanho do arquivo que irá receber antes mesmo de processar a imagem, então sabe exatamente quando irá fechar, evitando 
+        o problema do timeout.
+
+    Desvantagens:
+        Mesmo assim, isso não garante que algum pacote não ira ser alterado durante o envio. Pode receber arquivos corrompidos
+
+3. Explique por que tanto os programas de resposta às questões 1 e 2, mesmos sem apresentar erros
+aparentes não transferem arquivos grandes como deveriam. Gere um pequeno arquivo discussao.txt
+na pasta de resposta a essa questão.
+
+    O protocolo UDP não garante a entrega dos pacotes e com arquivos grandes a perca deles é muito mais comum de acontecer. Com arquivos grandes
+    a rede fragmenta esses arquivos e como o UDP não garante a entrega eles se perdem.
